@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: teste
+    ports:
+      - '5432:5432' # Mapeia a porta padrão do PostgreSQL para a máquina host
+    volumes:
+      - pg_data:/var/lib/postgresql/data # Persistência dos dados
+  app:
+    image: node:latest
+    container_name: app
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/app
+    working_dir: /usr/app
+    environment:
+      DATABASE_URL: 'postgresql://user:1234@db:5432/teste'
+    depends_on:
+      - db
+    command: ['sh', '-c', 'npm install && npx prisma generate && npx prisma migrate dev && npm start'] # significa "executar o npm install e, caso não haja erro, execute o npm start".
+# Definindo o volume 'pg_data'
+volumes:
+  pg_data:
