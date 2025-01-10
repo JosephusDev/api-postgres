@@ -1,9 +1,9 @@
 {
-	"name": "postgres",
+	"name": "postgres-api",
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon --legacy-watch src/server.ts",
+		"dev": "nodemon --legacy-watch src/server.ts",
 		"test": "jest"
 	},
 	"keywords": [],
@@ -14,7 +14,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "^22.10.1",
 		"@types/supertest": "^6.0.2",
-		"prisma": "^6.0.1",
+		"prisma": "^6.2.1",
 		"supertest": "^7.0.0",
 		"ts-node": "^10.9.2",
 		"tsup": "^8.3.5",
@@ -22,7 +22,7 @@
 		"typescript": "^5.7.2"
 	},
 	"dependencies": {
-		"@prisma/client": "^6.0.1",
+		"@prisma/client": "^6.2.1",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
 		"@types/jest": "^29.5.14",
