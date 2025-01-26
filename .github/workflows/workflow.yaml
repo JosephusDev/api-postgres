@@ -1,9 +1,13 @@
-name: Continous Integration
+name: Continuous Integration
 
-on: pull_request
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  continuos-integration:
+  continuous-integration:
     runs-on: ubuntu-latest
 
     steps:
@@ -11,7 +15,7 @@ jobs:
     - name: Using Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 20.
+        node-version: 20
     - name: run install, build and test
       run: |
         npm install
