@@ -12,5 +12,11 @@ services:
       - '5432:5432' # Mapeia a porta padrão do PostgreSQL para a máquina host
     volumes:
       - data:/var/lib/postgresql/data # Persistência dos dados
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
 volumes:
   data:

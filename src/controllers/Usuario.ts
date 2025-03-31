@@ -1,78 +1,71 @@
-import { PrismaClient } from '@prisma/client'
-import { Request, Response } from 'express'
-import { UserSchema } from '../schema/user'
+import { FastifyRequest, FastifyReply } from 'fastify'
+import { UserSchema } from '../schema/Usuario'
 import { z } from 'zod'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { createUser, deleteUser, getUsers, updateUser } from '../models/Usuario'
 
-interface Params {
-	id: string
-}
-
-const prisma = new PrismaClient()
-
-export const getAll = async (req: Request, res: Response) => {
-	const users = await prisma.usuario.findMany()
-	res.status(200).json(users)
-}
-
-export const Create = async (req: Request, res: Response) => {
+export const getAll = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
-		const { nome, email } = UserSchema.parse(req.body)
-		const result = await prisma.usuario.create({
-			data: {
-				nome,
-				email,
-			},
-		})
+		console.time('Get users')
+		const users = await getUsers()
+		console.timeEnd('Get users')
+		return res.status(200).send(users)
+	} catch (error) {
+		console.error('Erro ao buscar usuários:', error)
+		return res.status(500).send({ error: 'Erro interno do servidor' })
+	}
+}
+
+export const Create = async (req: FastifyRequest, res: FastifyReply) => {
+	try {
+		const data = UserSchema.parse(req.body)
+		const result = await createUser(data)
 		res.status(201).send(result)
 	} catch (error) {
 		if (error instanceof z.ZodError) {
-			// Se o erro for do Zod (validação), retorne um erro 400 com os detalhes
-			res.status(400).json({
+			res.status(400).send({
 				message: error.errors[0].message,
 			})
+		} else if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+			res.status(400).send({ message: 'Este e-mail já existe.' })
 		} else {
-			res.status(500).json({
-				message: 'Erro' + error,
+			res.status(500).send({
+				message: 'Erro: ' + error,
 			})
 		}
 	}
 }
 
-export const Update = async (req: Request<{}, {}, {}, Params>, res: Response) => {
+export const Update = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
-		const { id } = req.query
-		const data = UserSchema.partial().parse(req.body)
-		await prisma.usuario.update({
-			data,
-			where: { id },
-		})
-		res.status(204).json({ message: 'Atualizado com sucesso.' })
+		const { id } = req.params as { id: string }
+		const data = UserSchema.parse(req.body)
+		await updateUser(id, data)
+		res.status(204).send({ message: 'Atualizado com sucesso.' })
 	} catch (error) {
 		if (error instanceof z.ZodError) {
-			res.status(400).json({
+			console.log(error)
+			res.status(400).send({
 				message: error.errors[0].message,
 			})
 		} else if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-			res.status(404).json({ message: 'Usuário inexistente' })
+			res.status(404).send({ message: 'Usuário inexistente' })
 		} else {
-			res.status(500).json({ message: 'Erro: ' + error })
+			res.status(500).send({ message: 'Erro: ' + error })
 		}
 	}
 }
 
-export const Delete = async (req: Request<{}, {}, {}, Params>, res: Response) => {
+export const Delete = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
-		const { id } = req.query
-		await prisma.usuario.delete({
-			where: { id: id },
-		})
-		res.status(204).json({ message: 'Eliminado com sucesso' })
+		const { id } = req.params as { id: string }
+		await deleteUser(id)
+		res.status(204).send({ message: 'Eliminado com sucesso.' })
 	} catch (error) {
 		if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-			res.status(404).json({ message: 'Usuário inexistente' })
+			res.status(404).send({ message: 'Usuário inexistente' })
 		} else {
-			res.status(500).json({ message: 'Erro:' + error })
+			res.status(500).send({ message: 'Erro: ' + error })
 		}
 	}
 }

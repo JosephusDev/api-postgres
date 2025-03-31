@@ -11,6 +11,6 @@ datasource db {
 model Usuario {
   id String @id @default(cuid())
   nome String
-  email String?
+  email String? @unique
   createdAt DateTime @default(now())
 }
