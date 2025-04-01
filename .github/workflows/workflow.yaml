@@ -1,10 +1,8 @@
 name: Continuous Integration
-
 on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
   continuous-integration:
@@ -18,5 +16,7 @@ jobs:
         node-version: 20
     - name: install dependencies and test
       run: |
+        npm cache clean --force
         npm install
+        npx prisma generate
         npm run test
