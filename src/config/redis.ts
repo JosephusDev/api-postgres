@@ -1,8 +1,5 @@
-import { Redis } from 'ioredis'
+import { createClient } from 'redis'
 
-const redis = new Redis({
-	host: process.env.REDIS_HOST,
-	port: 6379,
-})
+const client = createClient()
 
-export default redis
+export default client

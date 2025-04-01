@@ -1,12 +1,12 @@
 import { PrismaClient, Usuario } from '@prisma/client'
-import redis from '../config/redis'
+import client from '../config/redis'
+import { env } from '../env'
 
 const prisma = new PrismaClient()
 
 export const getUsers = async () => {
-	const cachedKey = 'users:all'
 	// Obtém os dados do cache com await
-	const cache = await redis.get(cachedKey)
+	const cache = await client.get(env.REDIS_CACHED_KEY)
 	if (cache) {
 		console.log('cache')
 		const cachedUsers = JSON.parse(cache, (key, value) => {
@@ -20,19 +20,23 @@ export const getUsers = async () => {
 	}
 	// Obtém os dados do banco de dados
 	const users = await prisma.usuario.findMany()
+
 	// Salva os dados no cache por 60 segundos
-	await redis
-		.set(cachedKey, JSON.stringify(users), 'EX', 120)
-		.catch(err => console.error('Erro ao salvar no cache:', err))
+	const cachedUsers = JSON.stringify(users)
+	await client.set(env.REDIS_CACHED_KEY, cachedUsers).catch(err => console.error('Erro ao salvar no cache:', err))
 	return users
 }
 
 export const createUser = async (data: Pick<Usuario, 'nome' | 'email'>) => {
 	const result = await prisma.usuario.create({ data })
+	// Remove o cache caso o usuário seja criado
+	await client.del(env.REDIS_CACHED_KEY)
 	return result
 }
 
 export const updateUser = async (id: string, data: Pick<Usuario, 'nome' | 'email'>) => {
+	// Remove o cache caso o usuário seja atualizado
+	await client.del(env.REDIS_CACHED_KEY)
 	return await prisma.usuario.update({
 		data,
 		where: { id },
@@ -40,7 +44,9 @@ export const updateUser = async (id: string, data: Pick<Usuario, 'nome' | 'email
 }
 
 export const deleteUser = async (id: string) => {
-	await prisma.usuario.delete({
+	// Remove o cache caso o usuário seja deletado
+	await client.del(env.REDIS_CACHED_KEY)
+	return await prisma.usuario.delete({
 		where: { id: id },
 	})
 }

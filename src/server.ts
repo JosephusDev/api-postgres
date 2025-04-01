@@ -1,10 +1,12 @@
 import { app } from './app'
+import client from './config/redis'
+import { env } from './env'
 
 const startServer = async () => {
-	const PORT = process.env.PORT ? Number(process.env.PORT) : 3333
 	try {
-		await app.listen({ port: PORT })
-		console.log(`Server is running on http://localhost:${PORT}`)
+		await client.connect()
+		await app.listen({ port: env.PORT })
+		console.log(`Server is running on http://localhost:${env.PORT}`)
 	} catch (err) {
 		app.log.error(err)
 		process.exit(1)
