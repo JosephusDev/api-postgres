@@ -28,4 +28,6 @@ jobs:
           # Variáveis do banco de dados (definidas nos GitHub Secrets)
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           REDIS_CACHED_KEY: ${{ secrets.REDIS_CACHED_KEY }}
+          DATABASE_URL_DOCKER: ${{ secrets.DATABASE_URL_DOCKER }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
         run: npm run test
