@@ -13,17 +13,16 @@ describe('User CRUD Operations', () => {
 
 	// Teste de criação de usuário
 	it('should create a user with valid data', async () => {
-		const response = await testServer.post('/users').send({
+		const result = await testServer.post('/users').send({
 			nome: 'Teste',
 			email: 'teste@teste.com',
 		})
 
-		// Se Redis estiver offline, o teste ainda pode passar se o app funcionar sem Redis
-		expect([201, 500]).toContain(response.status)
-		if (response.status === 201) {
-			expect(response.body).toHaveProperty('id')
-			userId = response.body.id
-		}
+		expect(result.status).toBe(201)
+		expect(result.body).toHaveProperty('id')
+
+		// Armazena o ID do usuário criado para uso no teste de exclusão
+		userId = result.body.id
 	}, 30000)
 
 	// teste de erro de criação de usuário
