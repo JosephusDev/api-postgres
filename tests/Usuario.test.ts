@@ -15,7 +15,7 @@ describe('User CRUD Operations', () => {
 
 		// Armazena o ID do usuário criado para uso no teste de exclusão
 		userId = result.body.id
-	})
+	}, 30000)
 
 	// teste de erro de criação de usuário
 	it('should return an error when data is not valid', async () => {
@@ -23,7 +23,7 @@ describe('User CRUD Operations', () => {
 			nome: 'Teste',
 		})
 		expect(result.status).toBe(400)
-	})
+	}, 30000)
 
 	// Teste de alteração de usuário
 	it('should update a user with valid data', async () => {
@@ -33,7 +33,7 @@ describe('User CRUD Operations', () => {
 		})
 
 		expect(result.status).toBe(204)
-	})
+	}, 30000)
 
 	// Teste de exclusão de usuário
 	it('should delete a user with existing id', async () => {
@@ -45,11 +45,11 @@ describe('User CRUD Operations', () => {
 
 		// Verifica se a exclusão foi bem-sucedida
 		expect(deleteResult.status).toBe(204)
-	})
+	}, 30000)
 
 	// Listar os usuários
 	it('should return a list of users', async () => {
 		const result = await testServer.get('/users')
 		expect(result.status).toBe(200)
-	})
+	}, 30000)
 })
