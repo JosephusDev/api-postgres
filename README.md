@@ -25,6 +25,12 @@ services:
       - '5432:5432' # Mapeia a porta padrão do PostgreSQL para a máquina host
     volumes:
       - data:/var/lib/postgresql/data # Persistência dos dados
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
 volumes:
   data:
 ```
@@ -52,6 +58,11 @@ npm install
 
 ```env
 DATABASE_URL="postgresql://docker:docker@localhost:5432/dbusers"
+```
+### OU
+
+```env
+DATABASE_URL="postgresql://dbusers_owner:npg_ZtHWxs6nmO8S@ep-proud-sky-a5mxsffh-pooler.us-east-2.aws.neon.tech/dbusers?sslmode=require"
 ```
 
 ### 2.3. Execute as Migrações
