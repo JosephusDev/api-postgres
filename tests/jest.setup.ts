@@ -3,14 +3,22 @@ import { app } from '../src/app'
 import client from '../src/config/redis'
 
 beforeAll(async () => {
-	await client.connect() // Certifica-se que o Redis está rodando
-	await app.ready() // Certifica-se de que o Fastify está pronto antes dos testes
+	try {
+		await client.connect().catch(err => {
+			console.warn('Redis connection failed, proceeding with tests:', err.message)
+		})
+		await app.ready()
+	} catch (error) {
+		console.error('Test setup failed:', error)
+		throw error
+	}
 })
 
 afterAll(async () => {
-	await app.close() // Fecha o servidor após os testes para evitar conflitos
-	await client.disconnect() // Fecha o cliente do Redis após os testes para evitar conflitos
+	await app.close()
+	if (client.isOpen) {
+		await client.disconnect()
+	}
 })
 
-// Usa `supertest(app.server)` para garantir compatibilidade
 export const testServer = supertest(app.server)
