@@ -83,6 +83,13 @@ Isso abrirá uma interface gráfica no seu navegador onde você poderá visualiz
 - **`ports`**: Mapeia a porta 5432 do container para a porta 5432 da máquina host.
 - **`volumes`**: Persiste os dados do banco de dados em um volume chamado `data`.
 
+## 4. Rodar o servidor e acessar a documentação swagger (http://localhost:3333/doocs)
+
+```bash
+npm run dev 
+```
+
+
 ## 4. Conclusão
 
 Seguindo esses passos, você terá um ambiente de desenvolvimento configurado para a API com Node.js, TypeScript, Prisma e PostgreSQL. Agora você pode começar a desenvolver sua aplicação!
