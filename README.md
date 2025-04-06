@@ -52,7 +52,10 @@ npm install
 
 ```env
 DATABASE_URL="postgresql://docker:docker@localhost:5432/dbusers"
-REDIS_HOST=localhost
+REDIS_HOST="localhost"
+REDIS_USERNAME="default"
+REDIS_PASSWORD=""
+REDIS_PORT=6379
 ```
 
 ### 2.3. Execute as Migrações
