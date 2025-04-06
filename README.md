@@ -1,10 +1,10 @@
-# Guia de Configuração do Projeto API com Node.js, TypeScript, Prisma e PostgreSQL
+# Guia de Configuração do Projeto API com Node.js, Fastify, TypeScript, Prisma, Redis e PostgreSQL
 
 Este guia fornece as diretrizes para configurar o ambiente de desenvolvimento para a API utilizando Docker, Node.js, TypeScript e Prisma. Siga os passos abaixo para instalar as dependências, subir o container do PostgreSQL e configurar o Prisma.
 
 ## 1. Instalação do Docker e Subida do Container
 
-### 1.1. Instale o Docker e a imagem do Postgres
+### 1.1. Instale o Docker e a imagem do Postgres e do Redis
 Certifique-se de que o Docker está instalado na sua máquina. Caso não tenha, siga as instruções de instalação no site oficial: [Docker Installation](https://docs.docker.com/get-docker/).
 
 ### 1.2. O Arquivo `docker-compose.yml`
@@ -25,12 +25,6 @@ services:
       - '5432:5432' # Mapeia a porta padrão do PostgreSQL para a máquina host
     volumes:
       - data:/var/lib/postgresql/data # Persistência dos dados
-  redis:
-    image: 'bitnami/redis:latest'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    ports:
-      - '6379:6379'
 volumes:
   data:
 ```
@@ -58,11 +52,7 @@ npm install
 
 ```env
 DATABASE_URL="postgresql://docker:docker@localhost:5432/dbusers"
-```
-### OU
-
-```env
-DATABASE_URL="postgresql://dbusers_owner:npg_ZtHWxs6nmO8S@ep-proud-sky-a5mxsffh-pooler.us-east-2.aws.neon.tech/dbusers?sslmode=require"
+REDIS_HOST=localhost
 ```
 
 ### 2.3. Execute as Migrações
