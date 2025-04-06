@@ -90,6 +90,6 @@ npm run dev
 ```
 
 
-## 4. Conclusão
+## 5. Conclusão
 
 Seguindo esses passos, você terá um ambiente de desenvolvimento configurado para a API com Node.js, TypeScript, Prisma e PostgreSQL. Agora você pode começar a desenvolver sua aplicação!
