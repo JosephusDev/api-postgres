@@ -20,7 +20,11 @@ export const getUsers = async () => {
 		}
 	}
 	// Obtém os dados do banco de dados
-	const users = await prisma.usuario.findMany()
+	const users = await prisma.usuario.findMany({
+		orderBy: {
+			nome: 'asc',
+		},
+	})
 
 	if (client.isOpen) {
 		// Salva os dados no cache

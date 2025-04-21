@@ -9,6 +9,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
 		{
 			schema: {
 				description: 'Create a new user',
+				operationId: 'createUser',
 				tags: ['users'],
 				body: UserSchema,
 			},
@@ -20,6 +21,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
 		{
 			schema: {
 				description: 'Get all users',
+				operationId: 'getUsers',
 				tags: ['users'],
 				response: {
 					200: UserArraySchema,
@@ -33,6 +35,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
 		{
 			schema: {
 				description: 'Update a user',
+				operationId: 'updateUser',
 				tags: ['users'],
 				body: UserSchema,
 				response: {
@@ -49,6 +52,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
 		{
 			schema: {
 				description: 'Delete a user',
+				operationId: 'deleteUser',
 				tags: ['users'],
 				response: {
 					204: z.object({
