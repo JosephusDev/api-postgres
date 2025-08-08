@@ -19,7 +19,7 @@ export const getAll = async (req: FastifyRequest, res: FastifyReply) => {
 export const Create = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
 		const data = UserSchema.parse(req.body)
-		const result = await createUser(data)
+		const result = await createUser({ nome: data.nome, email: data.email })
 		res.status(201).send(result)
 	} catch (error) {
 		if (error instanceof z.ZodError) {
@@ -40,7 +40,7 @@ export const Update = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
 		const { id } = req.params as { id: string }
 		const data = UserSchema.parse(req.body)
-		await updateUser(id, data)
+		await updateUser(id, { nome: data.nome, email: data.email })
 		res.status(204).send({ message: 'Atualizado com sucesso.' })
 	} catch (error) {
 		if (error instanceof z.ZodError) {

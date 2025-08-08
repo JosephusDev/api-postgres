@@ -8,7 +8,7 @@ import {
 } from 'fastify-type-provider-zod'
 import { userRoutes } from './routes/Usuario'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -29,8 +29,11 @@ app.register(fastifySwagger, {
 	transform: jsonSchemaTransform,
 })
 
-app.register(fastifySwaggerUi, {
+app.register(scalarFastifyApiReference, {
 	routePrefix: '/docs',
+	configuration: {
+		theme: 'kepler',
+	},
 })
 
 // Rotas
