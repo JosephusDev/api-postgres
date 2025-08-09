@@ -8,12 +8,12 @@
 		"test": "jest --detectOpenHandles",
 		"test:unit": "jest tests/unit --detectOpenHandles",
 		"test:integration": "jest tests/integration --detectOpenHandles",
-		"test:e2e": "jest tests/Usuario.test.ts --detectOpenHandles",
+		"test:e2e": "jest tests/User.test.ts --detectOpenHandles",
 		"test:watch": "jest --watch --detectOpenHandles",
 		"test:coverage": "jest --coverage --detectOpenHandles"
 	},
 	"prisma": {
-		"seed": "ts-node prisma/seed.ts"
+		"seed": "tsx prisma/seed.ts"
 	},
 	"keywords": [],
 	"author": "FullTech",
@@ -28,7 +28,7 @@
 		"supertest": "^7.0.0",
 		"ts-node": "^10.9.2",
 		"tsup": "^8.3.5",
-		"tsx": "^4.19.2",
+		"tsx": "^4.20.3",
 		"typescript": "^5.7.2"
 	},
 	"dependencies": {

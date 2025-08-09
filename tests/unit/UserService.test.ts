@@ -1,14 +1,14 @@
-import { UsuarioService } from '../../src/services/UsuarioService'
-import { Usuario } from '../../src/entities/Usuario'
-import { IUsuarioRepository, ICacheService } from '../../src/interfaces'
+import { UserService } from '../../src/services/UserService'
+import { User } from '../../src/entities/User'
+import { IUserRepository, ICacheService } from '../../src/interfaces'
 
 /**
- * Testes unitários do UsuarioService usando mocks
+ * Testes unitários do UserService usando mocks
  * Estes testes são rápidos e não dependem de infraestrutura externa
  */
-describe('UsuarioService - Unit Tests', () => {
-	let usuarioService: UsuarioService
-	let mockRepository: jest.Mocked<IUsuarioRepository>
+describe('UserService - Unit Tests', () => {
+	let userService: UserService
+	let mockRepository: jest.Mocked<IUserRepository>
 	let mockCacheService: jest.Mocked<ICacheService>
 
 	beforeEach(() => {
@@ -31,24 +31,24 @@ describe('UsuarioService - Unit Tests', () => {
 		}
 
 		// Instância do service com dependências mockadas
-		usuarioService = new UsuarioService(mockRepository, mockCacheService)
+		userService = new UserService(mockRepository, mockCacheService)
 	})
 
 	afterEach(() => {
 		jest.clearAllMocks()
 	})
 
-	describe('getAllUsuarios', () => {
+	describe('getAllUsers', () => {
 		it('should return cached users when cache is available', async () => {
 			// Arrange
 			const cachedUsers = [
-				new Usuario('1', 'João', 'joao@test.com', new Date()),
-				new Usuario('2', 'Maria', 'maria@test.com', new Date()),
+				new User('1', 'João', 'joao@test.com', new Date()),
+				new User('2', 'Maria', 'maria@test.com', new Date()),
 			]
 			mockCacheService.get.mockResolvedValue(cachedUsers)
 
 			// Act
-			const result = await usuarioService.getAllUsuarios()
+			const result = await userService.getAllUsers()
 
 			// Assert
 			expect(result).toEqual(cachedUsers)
@@ -58,12 +58,12 @@ describe('UsuarioService - Unit Tests', () => {
 
 		it('should fetch from repository and cache when cache is empty', async () => {
 			// Arrange
-			const repoUsers = [new Usuario('1', 'João', 'joao@test.com', new Date())]
+			const repoUsers = [new User('1', 'João', 'joao@test.com', new Date())]
 			mockCacheService.get.mockResolvedValue(null)
 			mockRepository.findAll.mockResolvedValue(repoUsers)
 
 			// Act
-			const result = await usuarioService.getAllUsuarios()
+			const result = await userService.getAllUsers()
 
 			// Assert
 			expect(result).toEqual(repoUsers)
@@ -73,18 +73,18 @@ describe('UsuarioService - Unit Tests', () => {
 		})
 	})
 
-	describe('createUsuario', () => {
+	describe('createUser', () => {
 		it('should create user successfully with valid data', async () => {
 			// Arrange
 			const nome = 'João Silva'
 			const email = 'joao@test.com'
-			const createdUser = new Usuario('123', nome, email, new Date())
+			const createdUser = new User('123', nome, email, new Date())
 
 			mockRepository.findByEmail.mockResolvedValue(null)
 			mockRepository.create.mockResolvedValue(createdUser)
 
 			// Act
-			const result = await usuarioService.createUsuario(nome, email)
+			const result = await userService.createUser(nome, email)
 
 			// Assert
 			expect(result).toEqual(createdUser)
@@ -97,12 +97,12 @@ describe('UsuarioService - Unit Tests', () => {
 			// Arrange
 			const nome = 'João Silva'
 			const email = 'joao@test.com'
-			const existingUser = new Usuario('456', 'Outro João', email, new Date())
+			const existingUser = new User('456', 'Outro João', email, new Date())
 
 			mockRepository.findByEmail.mockResolvedValue(existingUser)
 
 			// Act & Assert
-			await expect(usuarioService.createUsuario(nome, email)).rejects.toThrow('Este e-mail já existe')
+			await expect(userService.createUser(nome, email)).rejects.toThrow('Este e-mail já existe')
 
 			expect(mockRepository.create).not.toHaveBeenCalled()
 		})
@@ -113,7 +113,7 @@ describe('UsuarioService - Unit Tests', () => {
 			const email = 'joao@test.com'
 
 			// Act & Assert
-			await expect(usuarioService.createUsuario(nome, email)).rejects.toThrow('O nome deve ter no mínimo 3 caracteres')
+			await expect(userService.createUser(nome, email)).rejects.toThrow('O nome deve ter no mínimo 3 caracteres')
 
 			expect(mockRepository.findByEmail).not.toHaveBeenCalled()
 		})
@@ -124,27 +124,27 @@ describe('UsuarioService - Unit Tests', () => {
 			const email = 'email-invalido' // sem @
 
 			// Act & Assert
-			await expect(usuarioService.createUsuario(nome, email)).rejects.toThrow('O e-mail deve ser válido')
+			await expect(userService.createUser(nome, email)).rejects.toThrow('O e-mail deve ser válido')
 
 			expect(mockRepository.findByEmail).not.toHaveBeenCalled()
 		})
 	})
 
-	describe('updateUsuario', () => {
+	describe('updateUser', () => {
 		it('should update user successfully', async () => {
 			// Arrange
 			const id = '123'
 			const nome = 'João Atualizado'
 			const email = 'joao.novo@test.com'
-			const existingUser = new Usuario(id, 'João Antigo', 'joao.antigo@test.com', new Date())
-			const updatedUser = new Usuario(id, nome, email, new Date())
+			const existingUser = new User(id, 'João Antigo', 'joao.antigo@test.com', new Date())
+			const updatedUser = new User(id, nome, email, new Date())
 
 			mockRepository.findById.mockResolvedValue(existingUser)
 			mockRepository.findByEmail.mockResolvedValue(null)
 			mockRepository.update.mockResolvedValue(updatedUser)
 
 			// Act
-			const result = await usuarioService.updateUsuario(id, nome, email)
+			const result = await userService.updateUser(id, nome, email)
 
 			// Assert
 			expect(result).toEqual(updatedUser)
@@ -162,20 +162,20 @@ describe('UsuarioService - Unit Tests', () => {
 			mockRepository.findById.mockResolvedValue(null)
 
 			// Act & Assert
-			await expect(usuarioService.updateUsuario(id, nome, email)).rejects.toThrow('Usuário não encontrado')
+			await expect(userService.updateUser(id, nome, email)).rejects.toThrow('Usuário não encontrado')
 		})
 	})
 
-	describe('deleteUsuario', () => {
+	describe('deleteUser', () => {
 		it('should delete user successfully', async () => {
 			// Arrange
 			const id = '123'
-			const existingUser = new Usuario(id, 'João', 'joao@test.com', new Date())
+			const existingUser = new User(id, 'João', 'joao@test.com', new Date())
 
 			mockRepository.findById.mockResolvedValue(existingUser)
 
 			// Act
-			await usuarioService.deleteUsuario(id)
+			await userService.deleteUser(id)
 
 			// Assert
 			expect(mockRepository.findById).toHaveBeenCalledWith(id)
@@ -190,7 +190,7 @@ describe('UsuarioService - Unit Tests', () => {
 			mockRepository.findById.mockResolvedValue(null)
 
 			// Act & Assert
-			await expect(usuarioService.deleteUsuario(id)).rejects.toThrow('Usuário não encontrado')
+			await expect(userService.deleteUser(id)).rejects.toThrow('Usuário não encontrado')
 
 			expect(mockRepository.delete).not.toHaveBeenCalled()
 		})

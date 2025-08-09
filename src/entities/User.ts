@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
 /**
- * Schemas de validação para a entidade Usuario
+ * Schemas de validação para a entidade User
  * Centraliza todas as regras de validação usando Zod
  */
-export const UsuarioValidationSchema = {
+export const UserValidationSchema = {
 	nome: z
 		.string({
 			message: 'O nome é obrigatório',
@@ -23,16 +23,16 @@ export const UsuarioValidationSchema = {
 }
 
 /**
- * Schema completo para validação de Usuario
+ * Schema completo para validação de User
  */
-export const UsuarioSchema = z.object(UsuarioValidationSchema)
+export const UserSchema = z.object(UserValidationSchema)
 
 /**
- * Entity Usuario - Representa a entidade de domínio Usuario
+ * Entity User - Representa a entidade de domínio User
  * Segue o princípio SRP (Single Responsibility Principle)
  * Responsabilidade única: representar um usuário no domínio
  */
-export class Usuario {
+export class User {
 	constructor(
 		public readonly id: string,
 		public readonly nome: string,
@@ -44,8 +44,8 @@ export class Usuario {
 	 * Método de fábrica para criar um novo usuário
 	 * Garante que as regras de criação estão centralizadas
 	 */
-	static create(nome: string, email: string, id?: string): Usuario {
-		return new Usuario(id || '', nome, email, new Date())
+	static create(nome: string, email: string, id?: string): User {
+		return new User(id || '', nome, email, new Date())
 	}
 
 	/**
@@ -54,7 +54,7 @@ export class Usuario {
 	 */
 	isValid(): boolean {
 		try {
-			UsuarioSchema.parse({
+			UserSchema.parse({
 				id: this.id,
 				nome: this.nome,
 				email: this.email,
@@ -72,7 +72,7 @@ export class Usuario {
 	 */
 	validate(): { isValid: boolean; errors?: string[] } {
 		try {
-			UsuarioSchema.parse({
+			UserSchema.parse({
 				id: this.id,
 				nome: this.nome,
 				email: this.email,

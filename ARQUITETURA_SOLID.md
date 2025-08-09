@@ -21,17 +21,17 @@ src/
 ## Princípios SOLID Aplicados
 
 ### 1. SRP (Single Responsibility Principle)
-- **Entity Usuario**: Responsável apenas por representar um usuário
-- **UsuarioRepository**: Responsável apenas pela persistência
-- **UsuarioService**: Responsável apenas pela lógica de negócio
-- **UsuarioController**: Responsável apenas pela coordenação HTTP
+- **Entity User**: Responsável apenas por representar um usuário
+- **UserRepository**: Responsável apenas pela persistência
+- **UserService**: Responsável apenas pela lógica de negócio
+- **UserController**: Responsável apenas pela coordenação HTTP
 - **CacheService**: Responsável apenas pelas operações de cache
 - **ServiceFactory**: Responsável apenas pela criação de serviços
 
 ### 2. OCP (Open/Closed Principle)
 - Classes fechadas para modificação, abertas para extensão
 - Novas funcionalidades podem ser adicionadas sem modificar código existente
-- Ex: Novos repositórios podem implementar IUsuarioRepository
+- Ex: Novos repositórios podem implementar IUserRepository
 
 ### 3. LSP (Liskov Substitution Principle)
 - Implementações podem ser substituídas por suas abstrações
@@ -39,8 +39,8 @@ src/
 
 ### 4. ISP (Interface Segregation Principle)
 - Interfaces específicas e coesas:
-  - `IUsuarioRepository`: Apenas operações de persistência
-  - `IUsuarioService`: Apenas operações de negócio
+  - `IUserRepository`: Apenas operações de persistência
+  - `IUserService`: Apenas operações de negócio
   - `ICacheService`: Apenas operações de cache
 
 ### 5. DIP (Dependency Inversion Principle)
@@ -52,8 +52,8 @@ src/
 
 ### Entities (Entidades)
 ```typescript
-// src/entities/Usuario.ts
-export class Usuario {
+// src/entities/User.ts
+export class User {
   // Representa a entidade de domínio
   // Contém validações básicas
   // Métodos de factory e conversão
@@ -62,21 +62,21 @@ export class Usuario {
 
 ### Interfaces (Contratos)
 ```typescript
-// src/interfaces/IUsuarioRepository.ts
-export interface IUsuarioRepository {
+// src/interfaces/IUserRepository.ts
+export interface IUserRepository {
   // Define o contrato para persistência
 }
 
-// src/interfaces/IUsuarioService.ts
-export interface IUsuarioService {
+// src/interfaces/IUserService.ts
+export interface IUserService {
   // Define o contrato para lógica de negócio
 }
 ```
 
 ### Repositories (Persistência)
 ```typescript
-// src/repositories/UsuarioRepository.ts
-export class UsuarioRepository implements IUsuarioRepository {
+// src/repositories/UserRepository.ts
+export class UserRepository implements IUserRepository {
   // Implementa operações de banco de dados
   // Converte dados do Prisma para entidades
 }
@@ -84,8 +84,8 @@ export class UsuarioRepository implements IUsuarioRepository {
 
 ### Services (Lógica de Negócio)
 ```typescript
-// src/services/UsuarioService.ts
-export class UsuarioService implements IUsuarioService {
+// src/services/UserService.ts
+export class UserService implements IUserService {
   // Implementa regras de negócio
   // Coordena repository e cache
   // Validações de domínio
@@ -104,7 +104,7 @@ export class ServiceFactory {
 
 ### Controllers (Coordenação HTTP)
 ```typescript
-// src/controllers/Usuario.ts
+// src/controllers/User.ts
 // Apenas coordena requisições HTTP
 // Chama services apropriados
 // Trata erros de forma padronizada

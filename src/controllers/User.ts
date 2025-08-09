@@ -1,14 +1,14 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { UsuarioSchema } from '../entities/Usuario'
+import { UserSchema } from '../entities/User'
 import { z } from 'zod'
 import { ServiceFactory } from '../factories/ServiceFactory'
 
 /**
- * UsuarioController - Controlador refatorado seguindo SOLID
+ * UserController - Controlador refatorado seguindo SOLID
  * Segue o princípio SRP (Single Responsibility Principle)
  * Responsabilidade única: coordenar requisições HTTP e respostas
  * Segue o princípio DIP (Dependency Inversion Principle)
- * Depende da abstração (IUsuarioService) ao invés de implementação concreta
+ * Depende da abstração (IUserService) ao invés de implementação concreta
  * Segue o princípio OCP (Open/Closed Principle)
  * Fechado para modificação, aberto para extensão
  */
@@ -18,8 +18,8 @@ const serviceFactory = ServiceFactory.getInstance()
 export const getAll = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
 		console.time('Get users')
-		const usuarioService = serviceFactory.getUsuarioService()
-		const users = await usuarioService.getAllUsuarios()
+		const UserService = serviceFactory.getUserService()
+		const users = await UserService.getAllUsers()
 		console.timeEnd('Get users')
 
 		// Converte as entidades para objetos simples para a resposta
@@ -34,7 +34,7 @@ export const getAll = async (req: FastifyRequest, res: FastifyReply) => {
 export const Create = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
 		// Validação manual de entrada usando Zod para controlar mensagens de erro
-		const validation = UsuarioSchema.safeParse(req.body)
+		const validation = UserSchema.safeParse(req.body)
 
 		if (!validation.success) {
 			// Retorna apenas a mensagem de erro limpa
@@ -45,8 +45,8 @@ export const Create = async (req: FastifyRequest, res: FastifyReply) => {
 		}
 
 		const data = validation.data
-		const usuarioService = serviceFactory.getUsuarioService()
-		const result = await usuarioService.createUsuario(data.nome, data.email)
+		const UserService = serviceFactory.getUserService()
+		const result = await UserService.createUser(data.nome, data.email)
 
 		res.status(201).send(result.toJSON())
 	} catch (error) {
@@ -74,7 +74,7 @@ export const Update = async (req: FastifyRequest, res: FastifyReply) => {
 		const { id } = req.params as { id: string }
 
 		// Validação manual de entrada usando Zod para controlar mensagens de erro
-		const validation = UsuarioSchema.safeParse(req.body)
+		const validation = UserSchema.safeParse(req.body)
 
 		if (!validation.success) {
 			// Retorna apenas a mensagem de erro limpa
@@ -85,8 +85,8 @@ export const Update = async (req: FastifyRequest, res: FastifyReply) => {
 		}
 
 		const data = validation.data
-		const usuarioService = serviceFactory.getUsuarioService()
-		await usuarioService.updateUsuario(id, data.nome, data.email)
+		const UserService = serviceFactory.getUserService()
+		await UserService.updateUser(id, data.nome, data.email)
 
 		res.status(204).send({ message: 'Atualizado com sucesso.' })
 	} catch (error) {
@@ -113,8 +113,8 @@ export const Delete = async (req: FastifyRequest, res: FastifyReply) => {
 	try {
 		const { id } = req.params as { id: string }
 
-		const usuarioService = serviceFactory.getUsuarioService()
-		await usuarioService.deleteUsuario(id)
+		const UserService = serviceFactory.getUserService()
+		await UserService.deleteUser(id)
 
 		res.status(204).send({ message: 'Eliminado com sucesso.' })
 	} catch (error) {

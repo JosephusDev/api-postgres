@@ -15,13 +15,13 @@ Este projeto implementa uma **pirâmide de testes** completa com três níveis:
 ```
 tests/
 ├── unit/                   # 🧪 Testes unitários (isolados)
-│   ├── Usuario.entity.test.ts
-│   └── UsuarioService.test.ts
+│   ├── User.entity.test.ts
+│   └── UserService.test.ts
 ├── integration/            # 🔗 Testes de integração (componentes)
-│   └── Usuario.integration.test.ts
+│   └── User.integration.test.ts
 ├── mocks/                  # 🎭 Implementações mock
 │   └── MockRepositories.ts
-├── Usuario.test.ts         # 🌐 Testes E2E (API completa)
+├── User.test.ts         # 🌐 Testes E2E (API completa)
 └── jest.setup.ts          # ⚙️ Configuração dos testes
 ```
 
@@ -75,7 +75,7 @@ tests/
 - Testam comportamento do usuário
 - Verificam API contracts
 
-// 📁 Localização: tests/Usuario.test.ts
+// 📁 Localização: tests/User.test.ts
 ```
 
 **Exemplos:**
@@ -131,7 +131,7 @@ const mockRepository = {
 ### **Para Integration Tests:**
 ```typescript
 // Implementações in-memory
-const repository = new InMemoryUsuarioRepository()
+const repository = new InMemoryUserRepository()
 const cache = new MockCacheService()
 ```
 
@@ -163,7 +163,7 @@ it('should create user successfully', async () => {
   const email = 'joao@test.com'
   
   // Act
-  const result = await service.createUsuario(nome, email)
+  const result = await service.createUser(nome, email)
   
   // Assert
   expect(result.nome).toBe(nome)
@@ -172,8 +172,8 @@ it('should create user successfully', async () => {
 
 ### **✅ Testes Descritivos**
 ```typescript
-describe('UsuarioService', () => {
-  describe('createUsuario', () => {
+describe('UserService', () => {
+  describe('createUser', () => {
     it('should create user successfully with valid data', () => {})
     it('should throw error when email already exists', () => {})
     it('should throw error when nome is invalid', () => {})

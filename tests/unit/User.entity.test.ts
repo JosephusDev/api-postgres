@@ -1,10 +1,10 @@
-import { Usuario, UsuarioSchema } from '../../src/entities/Usuario'
+import { User, UserSchema } from '../../src/entities/User'
 
 /**
- * Testes unitários da Entity Usuario
+ * Testes unitários da Entity User
  * Testam apenas a lógica de domínio, sem dependências externas
  */
-describe('Usuario Entity - Unit Tests', () => {
+describe('User Entity - Unit Tests', () => {
 	describe('Constructor', () => {
 		it('should create user with valid data', () => {
 			// Arrange
@@ -14,13 +14,13 @@ describe('Usuario Entity - Unit Tests', () => {
 			const createdAt = new Date()
 
 			// Act
-			const usuario = new Usuario(id, nome, email, createdAt)
+			const user = new User(id, nome, email, createdAt)
 
 			// Assert
-			expect(usuario.id).toBe(id)
-			expect(usuario.nome).toBe(nome)
-			expect(usuario.email).toBe(email)
-			expect(usuario.createdAt).toBe(createdAt)
+			expect(user.id).toBe(id)
+			expect(user.nome).toBe(nome)
+			expect(user.email).toBe(email)
+			expect(user.createdAt).toBe(createdAt)
 		})
 	})
 
@@ -31,13 +31,13 @@ describe('Usuario Entity - Unit Tests', () => {
 			const email = 'maria@test.com'
 
 			// Act
-			const usuario = Usuario.create(nome, email)
+			const user = User.create(nome, email)
 
 			// Assert
-			expect(usuario.nome).toBe(nome)
-			expect(usuario.email).toBe(email)
-			expect(usuario.id).toBe('') // ID vazio por padrão
-			expect(usuario.createdAt).toBeInstanceOf(Date)
+			expect(user.nome).toBe(nome)
+			expect(user.email).toBe(email)
+			expect(user.id).toBe('') // ID vazio por padrão
+			expect(user.createdAt).toBeInstanceOf(Date)
 		})
 
 		it('should create user with custom id', () => {
@@ -47,46 +47,46 @@ describe('Usuario Entity - Unit Tests', () => {
 			const customId = 'custom-123'
 
 			// Act
-			const usuario = Usuario.create(nome, email, customId)
+			const user = User.create(nome, email, customId)
 
 			// Assert
-			expect(usuario.id).toBe(customId)
-			expect(usuario.nome).toBe(nome)
-			expect(usuario.email).toBe(email)
+			expect(user.id).toBe(customId)
+			expect(user.nome).toBe(nome)
+			expect(user.email).toBe(email)
 		})
 	})
 
 	describe('Validation Methods', () => {
 		it('should validate correct user data', () => {
 			// Arrange
-			const usuario = new Usuario('123', 'João Silva', 'joao@test.com', new Date())
+			const user = new User('123', 'João Silva', 'joao@test.com', new Date())
 
 			// Act & Assert
-			expect(usuario.isValid()).toBe(true)
+			expect(user.isValid()).toBe(true)
 		})
 
 		it('should invalidate user with short name', () => {
 			// Arrange
-			const usuario = new Usuario('123', 'Jo', 'joao@test.com', new Date())
+			const user = new User('123', 'Jo', 'joao@test.com', new Date())
 
 			// Act & Assert
-			expect(usuario.isValid()).toBe(false)
+			expect(user.isValid()).toBe(false)
 		})
 
 		it('should invalidate user with invalid email', () => {
 			// Arrange
-			const usuario = new Usuario('123', 'João Silva', 'email-invalido', new Date())
+			const user = new User('123', 'João Silva', 'email-invalido', new Date())
 
 			// Act & Assert
-			expect(usuario.isValid()).toBe(false)
+			expect(user.isValid()).toBe(false)
 		})
 
 		it('should return detailed validation errors', () => {
 			// Arrange
-			const usuario = new Usuario('123', 'Jo', 'email-invalido', new Date())
+			const user = new User('123', 'Jo', 'email-invalido', new Date())
 
 			// Act
-			const validation = usuario.validate()
+			const validation = user.validate()
 
 			// Assert
 			expect(validation.isValid).toBe(false)
@@ -106,7 +106,7 @@ describe('Usuario Entity - Unit Tests', () => {
 			}
 
 			// Act
-			const result = UsuarioSchema.safeParse(validData)
+			const result = UserSchema.safeParse(validData)
 
 			// Assert
 			expect(result.success).toBe(true)
@@ -120,7 +120,7 @@ describe('Usuario Entity - Unit Tests', () => {
 			}
 
 			// Act
-			const result = UsuarioSchema.safeParse(invalidData)
+			const result = UserSchema.safeParse(invalidData)
 
 			// Assert
 			expect(result.success).toBe(false)
@@ -134,7 +134,7 @@ describe('Usuario Entity - Unit Tests', () => {
 			}
 
 			// Act
-			const result = UsuarioSchema.safeParse(invalidData)
+			const result = UserSchema.safeParse(invalidData)
 
 			// Assert
 			expect(result.success).toBe(false)
@@ -148,10 +148,10 @@ describe('Usuario Entity - Unit Tests', () => {
 			const nome = 'João Silva'
 			const email = 'joao@test.com'
 			const createdAt = new Date()
-			const usuario = new Usuario(id, nome, email, createdAt)
+			const user = new User(id, nome, email, createdAt)
 
 			// Act
-			const json = usuario.toJSON()
+			const json = user.toJSON()
 
 			// Assert
 			expect(json).toEqual({

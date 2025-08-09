@@ -6,7 +6,7 @@ import {
 	type ZodTypeProvider,
 	jsonSchemaTransform,
 } from 'fastify-type-provider-zod'
-import { userRoutes } from './routes/Usuario'
+import { userRoutes } from './routes/User'
 import fastifySwagger from '@fastify/swagger'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 

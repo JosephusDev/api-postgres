@@ -1,42 +1,42 @@
-import { Usuario } from '../../src/entities/Usuario'
-import { IUsuarioRepository } from '../../src/interfaces'
+import { User } from '../../src/entities/User'
+import { IUserRepository } from '../../src/interfaces'
 
 /**
  * Mock implementations para testes
  * Simula comportamento de repositórios sem dependências externas
  */
 
-export class InMemoryUsuarioRepository implements IUsuarioRepository {
-	private users: Usuario[] = []
+export class InMemoryUserRepository implements IUserRepository {
+	private users: User[] = []
 	private nextId = 1
 
-	async findAll(): Promise<Usuario[]> {
+	async findAll(): Promise<User[]> {
 		return [...this.users]
 	}
 
-	async findById(id: string): Promise<Usuario | null> {
+	async findById(id: string): Promise<User | null> {
 		return this.users.find(user => user.id === id) || null
 	}
 
-	async findByEmail(email: string): Promise<Usuario | null> {
+	async findByEmail(email: string): Promise<User | null> {
 		return this.users.find(user => user.email === email) || null
 	}
 
-	async create(usuario: Usuario): Promise<Usuario> {
-		const newUser = new Usuario(this.nextId.toString(), usuario.nome, usuario.email, new Date())
+	async create(user: User): Promise<User> {
+		const newUser = new User(this.nextId.toString(), user.nome, user.email, new Date())
 		this.users.push(newUser)
 		this.nextId++
 		return newUser
 	}
 
-	async update(id: string, data: Partial<Usuario>): Promise<Usuario> {
+	async update(id: string, data: Partial<User>): Promise<User> {
 		const userIndex = this.users.findIndex(user => user.id === id)
 		if (userIndex === -1) {
 			throw new Error('Usuário não encontrado')
 		}
 
 		const existingUser = this.users[userIndex]
-		const updatedUser = new Usuario(
+		const updatedUser = new User(
 			id,
 			data.nome || existingUser.nome,
 			data.email || existingUser.email,
@@ -61,7 +61,7 @@ export class InMemoryUsuarioRepository implements IUsuarioRepository {
 		this.nextId = 1
 	}
 
-	seed(users: Usuario[]): void {
+	seed(users: User[]): void {
 		this.users = [...users]
 	}
 }

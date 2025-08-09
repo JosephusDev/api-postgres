@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { createClient } from 'redis'
-import { UsuarioRepository } from '../repositories/UsuarioRepository'
-import { UsuarioService } from '../services/UsuarioService'
+import { UserRepository } from '../repositories/UserRepository'
+import { UserService } from '../services/UserService'
 import { CacheService } from '../services/CacheService'
 import { env } from '../env'
 
@@ -16,7 +16,7 @@ export class ServiceFactory {
 	private static instance: ServiceFactory
 	private prisma: PrismaClient
 	private redisClient: any
-	private usuarioService: UsuarioService | null = null
+	private UserService: UserService | null = null
 
 	private constructor() {
 		this.prisma = new PrismaClient()
@@ -43,13 +43,13 @@ export class ServiceFactory {
 		}
 	}
 
-	getUsuarioService(): UsuarioService {
-		if (!this.usuarioService) {
-			const usuarioRepository = new UsuarioRepository(this.prisma)
+	getUserService(): UserService {
+		if (!this.UserService) {
+			const userRepository = new UserRepository(this.prisma)
 			const cacheService = new CacheService(this.redisClient)
-			this.usuarioService = new UsuarioService(usuarioRepository, cacheService)
+			this.UserService = new UserService(userRepository, cacheService)
 		}
-		return this.usuarioService
+		return this.UserService
 	}
 
 	getPrismaClient(): PrismaClient {
