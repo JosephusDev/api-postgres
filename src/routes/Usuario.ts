@@ -1,7 +1,10 @@
 import { z } from 'zod'
 import { getAll, Create, Delete, Update } from '../controllers/Usuario'
-import { UserArraySchema, UserSchema } from '../schema/Usuario'
+import { UsuarioSchema } from '../entities/Usuario'
 import { FastifyTypedInstance } from '../types'
+
+// Schema para array de usuários
+const UsuarioArraySchema = z.array(UsuarioSchema)
 
 export async function userRoutes(app: FastifyTypedInstance) {
 	app.post(
@@ -11,7 +14,10 @@ export async function userRoutes(app: FastifyTypedInstance) {
 				description: 'Create a new user',
 				operationId: 'createUser',
 				tags: ['users'],
-				body: UserSchema,
+				body: UsuarioSchema,
+				response: {
+					201: UsuarioSchema,
+				},
 			},
 		},
 		Create,
@@ -24,7 +30,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
 				operationId: 'getUsers',
 				tags: ['users'],
 				response: {
-					200: UserArraySchema,
+					200: UsuarioArraySchema,
 				},
 			},
 		},
@@ -37,7 +43,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
 				description: 'Update a user',
 				operationId: 'updateUser',
 				tags: ['users'],
-				body: UserSchema,
+				body: UsuarioSchema,
 				response: {
 					204: z.object({
 						message: z.string(),

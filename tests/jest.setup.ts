@@ -12,9 +12,6 @@ jest.mock('@scalar/fastify-api-reference', () => {
 
 import { app } from '../src/app'
 
-// Aumenta o timeout para hooks para 10 segundos
-jest.setTimeout(10000)
-
 beforeAll(async () => {
 	try {
 		await client.connect().catch(err => {

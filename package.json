@@ -5,7 +5,12 @@
 	"type": "module",
 	"scripts": {
 		"dev": "tsx watch src/server.ts",
-		"test": "jest --detectOpenHandles"
+		"test": "jest --detectOpenHandles",
+		"test:unit": "jest tests/unit --detectOpenHandles",
+		"test:integration": "jest tests/integration --detectOpenHandles",
+		"test:e2e": "jest tests/Usuario.test.ts --detectOpenHandles",
+		"test:watch": "jest --watch --detectOpenHandles",
+		"test:coverage": "jest --coverage --detectOpenHandles"
 	},
 	"prisma": {
 		"seed": "ts-node prisma/seed.ts"

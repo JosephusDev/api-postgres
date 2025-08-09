@@ -3,11 +3,21 @@ import { testServer } from './jest.setup'
 
 let userId: string = ''
 
-describe('User CRUD Operations', () => {
+/**
+ * Testes E2E (End-to-End) da API de Usuários
+ * Testa a aplicação completa através de requisições HTTP
+ * Usa infraestrutura real (banco de dados, Redis)
+ */
+describe('User API - E2E Tests', () => {
 	// Verifica conexão com Redis antes de cada teste
-	beforeEach(() => {
+	beforeEach(async () => {
 		if (!client.isOpen) {
 			console.warn('Redis is not connected - some tests might fail')
+		}
+
+		// Limpa cache para garantir testes isolados
+		if (client.isOpen) {
+			await client.del('users')
 		}
 	})
 
@@ -26,11 +36,40 @@ describe('User CRUD Operations', () => {
 	}, 30000)
 
 	// teste de erro de criação de usuário
-	it('should return an error when data is not valid', async () => {
+	it('should return clean error message when data is not valid', async () => {
 		const result = await testServer.post('/users').send({
 			nome: 'Teste',
+			// email ausente
 		})
+
 		expect(result.status).toBe(400)
+		expect(result.body).toHaveProperty('message')
+		expect(result.body.message).toBe('O e-mail é obrigatório')
+		// Verifica que não há código de erro do Fastify
+		expect(result.body.message).not.toContain('body/')
+		expect(result.body.message).not.toContain('FST_ERR_VALIDATION')
+	}, 30000)
+
+	// teste de validação de nome muito curto
+	it('should return error for short name', async () => {
+		const result = await testServer.post('/users').send({
+			nome: 'Jo', // menos de 3 caracteres
+			email: 'jo@test.com',
+		})
+
+		expect(result.status).toBe(400)
+		expect(result.body.message).toBe('O nome deve ter no mínimo 3 caracteres')
+	}, 30000)
+
+	// teste de validação de email inválido
+	it('should return error for invalid email', async () => {
+		const result = await testServer.post('/users').send({
+			nome: 'João Silva',
+			email: 'email-invalido',
+		})
+
+		expect(result.status).toBe(400)
+		expect(result.body.message).toBe('O e-mail deve ser válido')
 	}, 30000)
 
 	// Teste de alteração de usuário

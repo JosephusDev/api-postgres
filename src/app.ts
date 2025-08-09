@@ -36,6 +36,21 @@ app.register(scalarFastifyApiReference, {
 	},
 })
 
+// Error handler customizado para limpar mensagens de erro do Zod
+app.setErrorHandler((error, request, reply) => {
+	// Se for erro de validação do Fastify/Zod
+	if (error.statusCode === 400 && error.code === 'FST_ERR_VALIDATION') {
+		// Extrai apenas a mensagem de erro limpa
+		const message = error.message.split(' ').slice(1).join(' ') // Remove "body/campo"
+		return reply.status(400).send({
+			message: message,
+		})
+	}
+
+	// Para outros erros, mantém o comportamento padrão
+	reply.send(error)
+})
+
 // Rotas
 app.register(userRoutes)
 
