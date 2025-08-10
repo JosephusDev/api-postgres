@@ -32,7 +32,7 @@ app.register(fastifySwagger, {
 app.register(scalarFastifyApiReference, {
 	routePrefix: '/docs',
 	configuration: {
-		theme: 'kepler',
+		theme: 'kepler', //purple,
 	},
 })
 
