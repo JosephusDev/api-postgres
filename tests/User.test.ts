@@ -9,7 +9,7 @@ let userId: string = ''
  * Usa infraestrutura real (banco de dados, Redis)
  */
 describe('User API - E2E Tests', () => {
-	// Verifica conexão com Redis antes de cada teste
+	// Verifica conexão com Redis antes de cada teste ser executado
 	beforeEach(async () => {
 		if (!client.isOpen) {
 			console.warn('Redis is not connected - some tests might fail')
